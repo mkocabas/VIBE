@@ -103,7 +103,7 @@ Procrustes Aligned Mean Per Joint Position Error (PA-MPJPE) in mm.
 ```
 
 ## License
-This code is freely available for **non-commercial scientific research purposes**, and may be redistributed under these conditions. Please, see the [LICENSE](LICENSE) for details. Third-party datasets and softwares are subject to their respective licenses.
+This code is available for **non-commercial scientific research purposes** as defined in the [LICENSE file](LICENSE). By downloading and using this code you agree to the terms in the [LICENSE](LICENSE). Third-party datasets and software are subject to their respective licenses.
 
 
 ## References
