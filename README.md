@@ -22,7 +22,7 @@ or the [arXiv report]() for further details.
 
 This implementation:
 
-- is the demo code for VIBE,
+- is the demo code for VIBE implemented purely in PyTorch,
 - can work on arbitrary videos with multi person,
 - supports both CPU and GPU inference (though GPU is way faster),
 - is fast, up-to 30 FPS on a RTX2080Ti (see [this table](doc/demo.md#runtime-performance)),
