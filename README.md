@@ -17,8 +17,7 @@
 ## Features
 
 _**V**ideo **I**nference for **B**ody Pose and Shape **E**stimation_ (VIBE) is a video pose and shape estimation method.
-It predicts the parameters of SMPL body model for each frame of an input video. Pleaser refer [here](README.md#vibe-model) 
-or the [arXiv report]() for further details.
+It predicts the parameters of SMPL body model for each frame of an input video. Pleaser refer to our [arXiv report]() for further details.
 
 This implementation:
 
