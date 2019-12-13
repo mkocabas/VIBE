@@ -1,5 +1,5 @@
 # VIBE: Video Inference for Human Body Pose and Shape Estimation
-[![report](https://img.shields.io/badge/arxiv-report-red)]() [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1dFfwxZ52MN86FA6uFNypMEdFShd2euQA)
+[![report](https://img.shields.io/badge/arxiv-report-red)](https://arxiv.org/abs/1912.05656) [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1dFfwxZ52MN86FA6uFNypMEdFShd2euQA)
 
 <p float="center">
   <img src="https://s5.gifyu.com/images/ezgif-6-fb456de304c9.gif" width="49%" />
@@ -9,7 +9,7 @@
 <sub>Video left: [https://www.youtube.com/watch?v=qlPRDVqYO74](https://www.youtube.com/watch?v=qlPRDVqYO74), Video right: [https://www.youtube.com/watch?v=Opry3F6aB1I](https://www.youtube.com/watch?v=Opry3F6aB1I)
 </sub>
 
-> [**VIBE: Video Inference for Human Body Pose and Shape Estimation**](https://arxiv.org/abs/1912.00000),            
+> [**VIBE: Video Inference for Human Body Pose and Shape Estimation**](https://arxiv.org/abs/1912.05656),            
 > [Muhammed Kocabas](https://ps.is.tuebingen.mpg.de/person/mkocabas), [Nikos Athanasiou](https://ps.is.tuebingen.mpg.de/person/nathanasiou), 
 [Michael J. Black](https://ps.is.tuebingen.mpg.de/person/black),        
 > *ArXiv, 2019* 
@@ -17,7 +17,7 @@
 ## Features
 
 _**V**ideo **I**nference for **B**ody Pose and Shape **E**stimation_ (VIBE) is a video pose and shape estimation method.
-It predicts the parameters of SMPL body model for each frame of an input video. Pleaser refer to our [arXiv report]() for further details.
+It predicts the parameters of SMPL body model for each frame of an input video. Pleaser refer to our [arXiv report](https://arxiv.org/abs/1912.05656) for further details.
 
 This implementation:
 
@@ -96,7 +96,7 @@ Procrustes Aligned Mean Per Joint Position Error (PA-MPJPE) in mm.
 @inproceedings{kocabas2019vibe,
   title={VIBE: Video Inference for Human Body Pose and Shape Estimation},
   author={Kocabas, Muhammed and Athanasiou, Nikos and Black, Michael J.},
-  journal={arXiv preprint arXiv:1912.00000},
+  journal={arXiv preprint arXiv:1912.05656},
   year={2019}
 }
 ```
