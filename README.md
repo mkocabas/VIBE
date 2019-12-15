@@ -6,6 +6,8 @@
   <img src="https://s5.gifyu.com/images/ezgif.com-optimize6d7c4d9d7251b20a.gif" width="49%" />
 </p>
 
+Watch [this video](https://drive.google.com/open?id=1kCQI2mjPkhFaHbnquiQHtq7oArDQ_Aus) for more qualitative results.
+
 <sub>Sources: left video - [https://www.youtube.com/watch?v=qlPRDVqYO74](https://www.youtube.com/watch?v=qlPRDVqYO74), right video - [https://www.youtube.com/watch?v=Opry3F6aB1I](https://www.youtube.com/watch?v=Opry3F6aB1I)
 </sub>
 
