@@ -11,6 +11,7 @@ pyrender
 progress
 filterpy
 matplotlib
+torchvision
 scikit-image
 scikit-video
 opencv-python
