@@ -1,19 +1,13 @@
 ---
 services:
-  nvidia-docker:
 
-  jupyter:
-    image: dldc
-    # user: $UID
+  vibe:
+    image: vibe:ubuntu
+    build:
+      context: .
+      dockerfile: Dockerfile
+      # dockerfile: Dockerfile.gpu # comment aboe, uncomment this line for gpu build
     volumes:
-      - ./shared:/shared
-    environment:
-      - VIRTUAL_HOST=jupyter.${EXTERNAL_HOST}
-      - VIRTUAL_PORT=8888
-      - JUPYTER_TOKEN=${JUPYTER_TOKEN}
-      - JUPYTER_PASSWORD_HASH=${JUPYTER_PASSWORD_HASH}
-    ports:
-      - "8888:8888"
-      - "8097:8097"
-    command: bash /root/.scripts/run_jupyter_lab.sh
-    shm_size: '36gb'
+    - ./data:/opt/vibe/vibe_data
+    - ./output:/opt/vibe/output
+    shm_size: '8gb'
