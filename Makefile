@@ -14,6 +14,16 @@ docker-build :
 docker-run :
 	@docker run -ti -v $(PWD)/output:/opt/vibe/output -v $(PWD)/data:/opt/vibe/vibe_data vibe:ubuntu
 
+## nvidia-build		:	build docker container with nvidia gpu.
+.PHONY: nvidia-build
+nvidia-build :
+	@docker build -t vibe:ubuntu-gpu -f Dockerfile.gpu .
+
+## nvidia-run		:	run docker container with nvidia gpu.
+.PHONY: nvidia-run
+nvidia-run :
+	@nvidia-docker run -ti -v $(PWD)/output:/opt/vibe/output -v $(PWD)/data:/opt/vibe/vibe_data
+
 ## help			:	Print commands help.
 .PHONY: help
 help : Makefile
