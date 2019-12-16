@@ -12,7 +12,7 @@ The following steps are required:
 - install `nvidia-docker`: https://github.com/NVIDIA/nvidia-docker
 - run with
 ```bash
-nvidia-docker run mkocabas/vibe:ubuntu-gpu
+nvidia-docker run -ti -v `pwd`/output:/opt/vibe/output -v `pwd`/data:/opt/vibe/vibe_data mkocabas/vibe:ubuntu-gpu
 ```
 
 Notes:
