@@ -29,9 +29,12 @@ to a temporary folder and then processed.
 - `--run_smplify`: Enable this flag if you want to refine the results of VIBE using Temporal SMPLify algorithm.
 For this option, you have to set `--tracking_method` option to `pose`.
 
-- `--no-render`: This flag disables the final rendering of VIBE results. Useful if you only want to get VIBE predictions.
+- `--no_render`: This flag disables the final rendering of VIBE results. Useful if you only want to get VIBE predictions.
 
 - `--wireframe`: Enable this if you would like to render wireframe meshes in the final rendering. 
+
+- `--sideview`: Render the output meshes from an alternate viewpoint. Default alternate viewpoint is -90 degrees in y axis.
+Note that this option doubles the rendering time.
 
 ## Examples
 - Run VIBE on a video file using bbox tracker and visualize the results with wireframe meshes:

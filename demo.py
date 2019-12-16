@@ -268,6 +268,9 @@ def main(args):
             img_fname = image_file_names[frame_idx]
             img = cv2.imread(img_fname)
 
+            if args.sideview:
+                side_img = np.zeros_like(img)
+
             for person_id, person_data in frame_results[frame_idx].items():
                 frame_verts = person_data['verts']
                 frame_cam = person_data['cam']
@@ -280,6 +283,19 @@ def main(args):
                     cam=frame_cam,
                     color=mc,
                 )
+
+                if args.sideview:
+                    side_img = renderer.render(
+                        side_img,
+                        frame_verts,
+                        cam=frame_cam,
+                        color=mc,
+                        angle=270,
+                        axis=[0,1,0],
+                    )
+
+            if args.sideview:
+                img = np.concatenate([img, side_img], axis=1)
 
             cv2.imwrite(os.path.join(output_img_folder, f'{frame_idx:06d}.png'), img)
 
@@ -340,7 +356,10 @@ if __name__ == '__main__':
                         help='disable final rendering of output video.')
 
     parser.add_argument('--wireframe', action='store_true',
-                        help='render all meshes as wireframes')
+                        help='render all meshes as wireframes.')
+
+    parser.add_argument('--sideview', action='store_true',
+                        help='render meshes from alternate viewpoint.')
 
     args = parser.parse_args()
 
