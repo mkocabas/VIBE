@@ -36,6 +36,8 @@ For this option, you have to set `--tracking_method` option to `pose`.
 - `--sideview`: Render the output meshes from an alternate viewpoint. Default alternate viewpoint is -90 degrees in y axis.
 Note that this option doubles the rendering time.
 
+- `--save_obj`: Save output meshes as .obj files.
+
 ## Examples
 - Run VIBE on a video file using bbox tracker and visualize the results with wireframe meshes:
 ```bash

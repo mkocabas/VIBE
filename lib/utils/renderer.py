@@ -75,12 +75,15 @@ class Renderer():
         light_pose[:3, 3] = [1, 1, 2]
         self.scene.add(light, pose=light_pose)
 
-    def render(self, img, verts, cam, angle=None, axis=None, color=[1.0, 1.0, 0.9]):
+    def render(self, img, verts, cam, angle=None, axis=None, mesh_filename=None, color=[1.0, 1.0, 0.9]):
 
         mesh = trimesh.Trimesh(vertices=verts, faces=self.faces)
 
         Rx = trimesh.transformations.rotation_matrix(math.radians(180), [1, 0, 0])
         mesh.apply_transform(Rx)
+
+        if mesh_filename is not None:
+            mesh.export(mesh_filename)
 
         if angle and axis:
             R = trimesh.transformations.rotation_matrix(math.radians(angle), axis)

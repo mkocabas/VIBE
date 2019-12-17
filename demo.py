@@ -277,11 +277,19 @@ def main(args):
 
                 mc = mesh_color[person_id]
 
+                mesh_filename = None
+
+                if args.save_obj:
+                    mesh_folder = os.path.join(output_path, 'meshes', f'{person_id:04d}')
+                    os.makedirs(mesh_folder, exist_ok=True)
+                    mesh_filename = os.path.join(mesh_folder, f'{frame_idx:06d}.obj')
+
                 img = renderer.render(
                     img,
                     frame_verts,
                     cam=frame_cam,
                     color=mc,
+                    mesh_filename=mesh_filename,
                 )
 
                 if args.sideview:
@@ -360,6 +368,9 @@ if __name__ == '__main__':
 
     parser.add_argument('--sideview', action='store_true',
                         help='render meshes from alternate viewpoint.')
+
+    parser.add_argument('--save_obj', action='store_true',
+                        help='save results as .obj files.')
 
     args = parser.parse_args()
 
