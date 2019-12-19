@@ -70,7 +70,7 @@ Then, running the demo is as simple as this:
 python demo.py --vid_file sample_video.mp4 --output_folder output/ --display
 
 # Run on a YouTube video
-python demo.py --vid_file https://www.youtube.com/watch?v=c4DAnQ6DtF8 --output_folder output/ --display
+python demo.py --vid_file https://www.youtube.com/watch?v=wPZP8Bwxplo --output_folder output/ --display
 ```
 
 Refer to [`doc/demo.md`](doc/demo.md) for more details about the demo code.
