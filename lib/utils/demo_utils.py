@@ -156,10 +156,11 @@ def smplify_runner(
     new_opt_cam_t = output['theta'][:,:3]
     new_opt_pose = output['theta'][:,3:75]
     new_opt_betas = output['theta'][:,75:]
+    new_opt_joints3d = output['kp_3d']
 
     return_val = [
         update, new_opt_vertices.cpu(), new_opt_cam_t.cpu(),
-        new_opt_pose.cpu(), new_opt_betas.cpu(),
+        new_opt_pose.cpu(), new_opt_betas.cpu(), new_opt_joints3d.cpu(),
         new_opt_joint_loss, opt_joint_loss,
     ]
 
