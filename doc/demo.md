@@ -62,7 +62,7 @@ We can inspect what this file contains by:
 ```python
 >>> import joblib # you may use native pickle here as well
 
->>> output = joblib.load('data/demo_results_kinetics_v2/group_dance/vibe_output.pkl') 
+>>> output = joblib.load('output/group_dance/vibe_output.pkl') 
 
 >>> print(output.keys())  
                                                                                                                                                                                                                                                                                                                                                                                               
@@ -75,11 +75,13 @@ orig_cam (n_frames, 4)      # weak perspective camera parameters in original ima
 verts (n_frames, 6890, 3)   # SMPL mesh vertices
 pose (n_frames, 72)         # SMPL pose parameters
 betas (n_frames, 10)        # SMPL body shape parameters
+joints3d (n_frames, 49, 3)  # SMPL 3D joints
 joints2d (n_frames, 21, 3)  # 2D keypoint detections by STAF if pose tracking enabled otherwise None
 bboxes (n_frames, 4)        # bbox detections (cx,cy,w,h)
 frame_ids (n_frames,)       # frame ids in which subject with tracking id #1 appears
 
 ```
+You can find the names & order of 3d joints [here](https://github.com/mkocabas/VIBE/blob/master/lib/data_utils/kp_utils.py#L212) and 2D joints [here](https://github.com/mkocabas/VIBE/blob/master/lib/data_utils/kp_utils.py#L187).
 
 ## Runtime Performance
 Here is the breakdown of runtime speeds per step namely tracking and VIBE. This results are obtained by running VIBE
