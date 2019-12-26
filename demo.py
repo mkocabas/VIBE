@@ -146,7 +146,7 @@ def main(args):
 
         with torch.no_grad():
 
-            pred_cam, pred_verts, pred_pose, pred_betas, pred_joints3d, norm_joints2d = [], [], [], [], []
+            pred_cam, pred_verts, pred_pose, pred_betas, pred_joints3d, norm_joints2d = [], [], [], [], [], []
 
             for batch in dataloader:
                 if has_keypoints:
