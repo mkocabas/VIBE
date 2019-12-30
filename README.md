@@ -75,6 +75,13 @@ python demo.py --vid_file https://www.youtube.com/watch?v=wPZP8Bwxplo --output_f
 
 Refer to [`doc/demo.md`](doc/demo.md) for more details about the demo code.
 
+Sample demo output with the `--sideview` flag:
+
+<p float="left">
+  <img src="https://s5.gifyu.com/images/sample_video.gif" width="30%" />
+</p>
+
+
 ## Google Colab
 If you do not have a suitable environment to run this projects then you could give Google Colab a try. 
 It allows you to run the project in the cloud, free of charge. You may try our Colab demo using the notebook we prepare: 
