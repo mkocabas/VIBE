@@ -198,6 +198,7 @@ def main(args):
             pred_cam = pred_cam.cpu()
             pred_pose = pred_pose.cpu()
             pred_betas = pred_betas.cpu()
+            pred_joints3d = pred_joints3d.cpu()
             pred_verts[update] = new_opt_vertices[update]
             pred_cam[update] = new_opt_cam[update]
             pred_pose[update] = new_opt_pose[update]
