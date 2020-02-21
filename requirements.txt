@@ -5,7 +5,7 @@ numba
 smplx
 gdown
 joblib
-pytube
+pytube==9.5.3
 trimesh
 pyrender
 progress
