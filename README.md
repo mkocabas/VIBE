@@ -1,4 +1,4 @@
-# VIBE: Video Inference for Human Body Pose and Shape Estimation
+# VIBE: Video Inference for Human Body Pose and Shape Estimation [CVPR-2020]
 [![report](https://img.shields.io/badge/arxiv-report-red)](https://arxiv.org/abs/1912.05656) [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1dFfwxZ52MN86FA6uFNypMEdFShd2euQA) [![PWC](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/vibe-video-inference-for-human-body-pose-and/3d-human-pose-estimation-on-3dpw)](https://paperswithcode.com/sota/3d-human-pose-estimation-on-3dpw?p=vibe-video-inference-for-human-body-pose-and)
 
 <p float="center">
@@ -14,7 +14,7 @@ Watch [this video](https://drive.google.com/open?id=1kCQI2mjPkhFaHbnquiQHtq7oArD
 > [**VIBE: Video Inference for Human Body Pose and Shape Estimation**](https://arxiv.org/abs/1912.05656),            
 > [Muhammed Kocabas](https://ps.is.tuebingen.mpg.de/person/mkocabas), [Nikos Athanasiou](https://ps.is.tuebingen.mpg.de/person/nathanasiou), 
 [Michael J. Black](https://ps.is.tuebingen.mpg.de/person/black),        
-> *ArXiv, 2019* 
+> *IEEE Computer Vision and Pattern Recognition, 2020* 
 
 ## Features
 
@@ -105,8 +105,9 @@ Procrustes Aligned Mean Per Joint Position Error (PA-MPJPE) in mm.
 @inproceedings{kocabas2019vibe,
   title={VIBE: Video Inference for Human Body Pose and Shape Estimation},
   author={Kocabas, Muhammed and Athanasiou, Nikos and Black, Michael J.},
-  journal={arXiv preprint arXiv:1912.05656},
-  year={2019}
+  booktitle = {The IEEE Conference on Computer Vision and Pattern Recognition (CVPR)},
+  month = {June},
+  year = {2020}
 }
 ```
 
