@@ -1,0 +1,12 @@
+.git
+.git/
+.git/*
+.git/**
+data
+data/
+data/*
+data/**
+output
+output/
+output/*
+output/**

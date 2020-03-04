@@ -1,0 +1,13 @@
+---
+services:
+
+  vibe:
+    image: vibe:ubuntu
+    build:
+      context: .
+      dockerfile: Dockerfile
+      # dockerfile: Dockerfile.gpu # comment aboe, uncomment this line for gpu build
+    volumes:
+    - ./data:/opt/vibe/vibe_data
+    - ./output:/opt/vibe/output
+    shm_size: '8gb'
