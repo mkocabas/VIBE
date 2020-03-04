@@ -9,5 +9,5 @@ conda activate $CONDA_ENV_NAME
 which python
 which pip
 
-pip install numpy torch torchvision
+pip install numpy==1.17.5 torch==1.4.0 torchvision==0.5.0
 pip install -r requirements.txt
