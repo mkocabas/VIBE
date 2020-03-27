@@ -82,11 +82,13 @@ the following paper in any publication making use of the Model & Software.
 
 Citation:
 
-@inproceedings{kocabas2019vibe,
-  title={VIBE: Video Inference for Human Body Pose and Shape Estimation},
-  author={Kocabas, Muhammed and Athanasiou, Nikos and Black, Michael J.},
-  journal={arXiv preprint arXiv:1912.00000},
-  year={2019}
+@inproceedings{VIBE:CVPR:2020,
+  title = {{VIBE}: Video Inference for Human Body Pose and Shape Estimation},
+  author = {Kocabas, Muhammed and Athanasiou, Nikos and Black, Michael J.},
+  booktitle = {Computer Vision and Pattern Recognition (CVPR)},
+  month = jun,
+  year = {2020},
+  month_numeric = {6}
 }
 
 Commercial licensing opportunities
