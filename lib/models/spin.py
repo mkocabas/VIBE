@@ -300,11 +300,10 @@ class HMR(nn.Module):
 
 
 class Regressor(nn.Module):
-    def __init__(self, use_6d=True, smpl_mean_params='data/vibe_data/smpl_mean_params.npz'):
+    def __init__(self, smpl_mean_params='data/vibe_data/smpl_mean_params.npz'):
         super(Regressor, self).__init__()
 
-        self.use_6d = use_6d
-        npose = 24 * 6 if use_6d else 24 * 3
+        npose = 24 * 6
 
         self.fc1 = nn.Linear(512 * 4 + npose + 13, 1024)
         self.drop1 = nn.Dropout()
@@ -323,23 +322,13 @@ class Regressor(nn.Module):
             create_transl=False
         )
 
-        if use_6d:
-            mean_params = np.load(smpl_mean_params)
-            init_pose = torch.from_numpy(mean_params['pose'][:]).unsqueeze(0)
-            init_shape = torch.from_numpy(mean_params['shape'][:].astype('float32')).unsqueeze(0)
-            init_cam = torch.from_numpy(mean_params['cam']).unsqueeze(0)
-            self.register_buffer('init_pose', init_pose)
-            self.register_buffer('init_shape', init_shape)
-            self.register_buffer('init_cam', init_cam)
-        else:
-            from lib.models.hmr import load_mean_dict
-            mean_params = load_mean_dict()
-            init_pose = torch.from_numpy(mean_params['pose'][:].astype('float32'))
-            init_shape = torch.from_numpy(mean_params['shape'][:].astype('float32'))
-            init_cam = torch.from_numpy(mean_params['cam'].astype('float32'))
-            self.register_buffer('init_pose', init_pose)
-            self.register_buffer('init_shape', init_shape)
-            self.register_buffer('init_cam', init_cam)
+        mean_params = np.load(smpl_mean_params)
+        init_pose = torch.from_numpy(mean_params['pose'][:]).unsqueeze(0)
+        init_shape = torch.from_numpy(mean_params['shape'][:].astype('float32')).unsqueeze(0)
+        init_cam = torch.from_numpy(mean_params['cam']).unsqueeze(0)
+        self.register_buffer('init_pose', init_pose)
+        self.register_buffer('init_shape', init_shape)
+        self.register_buffer('init_cam', init_cam)
 
 
 
@@ -366,24 +355,14 @@ class Regressor(nn.Module):
             pred_shape = self.decshape(xc) + pred_shape
             pred_cam = self.deccam(xc) + pred_cam
 
-        if self.use_6d:
-            pred_rotmat = rot6d_to_rotmat(pred_pose).view(batch_size, 24, 3, 3)
+        pred_rotmat = rot6d_to_rotmat(pred_pose).view(batch_size, 24, 3, 3)
 
-            pred_output = self.smpl(
-                betas=pred_shape,
-                body_pose=pred_rotmat[:, 1:],
-                global_orient=pred_rotmat[:, 0].unsqueeze(1),
-                pose2rot=False
-            )
-        else:
-            pred_rotmat = pred_pose.view(batch_size, 72)
-
-            pred_output = self.smpl(
-                betas=pred_shape,
-                body_pose=pred_rotmat[:, 3:],
-                global_orient=pred_rotmat[:, :3],
-                pose2rot=True,
-            )
+        pred_output = self.smpl(
+            betas=pred_shape,
+            body_pose=pred_rotmat[:, 1:],
+            global_orient=pred_rotmat[:, 0].unsqueeze(1),
+            pose2rot=False
+        )
 
         pred_vertices = pred_output.vertices
         pred_joints = pred_output.joints
@@ -395,10 +374,7 @@ class Regressor(nn.Module):
 
         pred_keypoints_2d = projection(pred_joints, pred_cam)
 
-        if self.use_6d:
-            pose = rotation_matrix_to_angle_axis(pred_rotmat.reshape(-1, 3, 3)).reshape(-1, 72)
-        else:
-            pose = pred_rotmat
+        pose = rotation_matrix_to_angle_axis(pred_rotmat.reshape(-1, 3, 3)).reshape(-1, 72)
 
         output = [{
             'theta'  : torch.cat([pred_cam, pose, pred_shape], dim=1),

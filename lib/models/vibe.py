@@ -122,7 +122,6 @@ class VIBE(nn.Module):
             attention=False,
             attention_cfg=None,
             use_residual=True,
-            use_6d=True,
             disable_temporal=False
     ):
 
@@ -153,16 +152,10 @@ class VIBE(nn.Module):
             )
 
         # regressor can predict cam, pose and shape params in an iterative way
-        self.regressor = Regressor(use_6d=use_6d)
+        self.regressor = Regressor()
 
         if pretrained and os.path.isfile(pretrained):
             pretrained_dict = torch.load(pretrained)['model']
-
-            if not use_6d:
-                del pretrained_dict['decpose.weight']
-                del pretrained_dict['decpose.bias']
-                del pretrained_dict['fc1.weight']
-                del pretrained_dict['fc1.bias']
 
             self.regressor.load_state_dict(pretrained_dict, strict=False)
             print(f'=> loaded pretrained model from \'{pretrained}\'')
@@ -202,7 +195,6 @@ class VIBE_Demo(nn.Module):
             attention=False,
             attention_cfg=None,
             use_residual=True,
-            use_6d=True,
             disable_temporal=False
     ):
 
@@ -237,16 +229,10 @@ class VIBE_Demo(nn.Module):
         self.hmr.load_state_dict(checkpoint['model'], strict=False)
 
         # regressor can predict cam, pose and shape params in an iterative way
-        self.regressor = Regressor(use_6d=use_6d)
+        self.regressor = Regressor()
 
         if pretrained and os.path.isfile(pretrained):
             pretrained_dict = torch.load(pretrained)['model']
-
-            if not use_6d:
-                del pretrained_dict['decpose.weight']
-                del pretrained_dict['decpose.bias']
-                del pretrained_dict['fc1.weight']
-                del pretrained_dict['fc1.bias']
 
             self.regressor.load_state_dict(pretrained_dict, strict=False)
             print(f'=> loaded pretrained model from \'{pretrained}\'')
