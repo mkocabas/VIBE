@@ -21,6 +21,16 @@ collectively “Max-Planck”)
 
 hereinafter the “Licensor”.
 
+This software includes the SMPL Body Model. By downloading this software, you are agreeing to be bound by the terms of the SMPL Model License
+
+        https://smpl.is.tue.mpg.de/modellicense
+
+which is necessary to create SMPL body models. 
+
+SMPL bodies that are generated with VIBE can be distributed freely under the SMPL Body License
+
+        https://smpl.is.tue.mpg.de/bodylicense
+
 License Grant
 Licensor grants you (Licensee) personally a single-user, non-exclusive, non-transferable, free of charge right:
 
