@@ -21,13 +21,10 @@ import torch
 import trimesh
 import pyrender
 import numpy as np
-
 from matplotlib import pyplot as plt
 
-from lib.data_utils.img_utils import torch2numpy, torch_vid2numpy
-from lib.data_utils.img_utils import normalize_2d_kp
-from lib.models.spin import SMPL, SMPL_MODEL_DIR, get_smpl_faces
-from lib.data_utils import kp_utils
+from lib.models.smpl import SMPL, SMPL_MODEL_DIR, get_smpl_faces
+from lib.data_utils.img_utils import torch2numpy, torch_vid2numpy, normalize_2d_kp
 
 
 class WeakPerspectiveCamera(pyrender.Camera):
@@ -218,7 +215,7 @@ def visualize_sequence(sequence):
 
     plt.close()
 
-def visualize_preds(image, preds, target=None, target_exists=True, dataset='common', vis_hmr=False, use_spin=False):
+def visualize_preds(image, preds, target=None, target_exists=True, dataset='common', vis_hmr=False):
     with torch.no_grad():
         if isinstance(image, torch.Tensor):
             image = torch2numpy(image)
@@ -282,7 +279,7 @@ def visualize_preds(image, preds, target=None, target_exists=True, dataset='comm
 
 
 def batch_visualize_preds(images, preds, target=None, max_images=16, idxs=None,
-                          target_exists=True, dataset='common', use_spin=False):
+                          target_exists=True, dataset='common'):
 
     if max_images is None or images.shape[0] < max_images:
         max_images = images.shape[0]
@@ -315,7 +312,7 @@ def batch_visualize_preds(images, preds, target=None, max_images=16, idxs=None,
             single_target = None
 
         img = visualize_preds(images[idx], single_pred, single_target, target_exists,
-                              dataset=dataset, use_spin=use_spin)
+                              dataset=dataset)
         result_images.append(img)
 
     result_image = np.vstack(result_images)
@@ -323,7 +320,7 @@ def batch_visualize_preds(images, preds, target=None, max_images=16, idxs=None,
     return result_image
 
 
-def batch_visualize_vid_preds(video, preds, target, max_video=4, vis_hmr=False, dataset='common', use_spin=False):
+def batch_visualize_vid_preds(video, preds, target, max_video=4, vis_hmr=False, dataset='common'):
     with torch.no_grad():
         if isinstance(video, torch.Tensor):
             video = torch_vid2numpy(video) # NTCHW
@@ -364,7 +361,7 @@ def batch_visualize_vid_preds(video, preds, target, max_video=4, vis_hmr=False, 
                 single_target[k] = v[batch_id, t_id]
 
             img = visualize_preds(image, single_pred, single_target,
-                                  vis_hmr=vis_hmr, dataset=dataset, use_spin=use_spin)
+                                  vis_hmr=vis_hmr, dataset=dataset)
 
             result_video.append(img[np.newaxis, ...])
 
@@ -438,15 +435,15 @@ def batch_draw_skeleton(images, target, max_images=8, dataset='common'):
 
 
 def get_regressor_output(features):
-    from lib.models.hmr import Regressor
-    from ..smpl.smpl_layer import SMPL_Layer
+    from lib.models.spin import Regressor
 
     batch_size, seqlen = features.shape[:2]
 
     device = 'cuda' if torch.cuda.is_available() else 'cpu'
 
-    model = Regressor(batch_size=batch_size*seqlen).to(device)
-    smpl = SMPL_Layer(gender='coco').to(device)
+    model = Regressor().to(device)
+
+    smpl = SMPL(SMPL_MODEL_DIR).to(device)
     pretrained = torch.load('models/model_best.pth.tar')['gen_state_dict']
 
     new_pretrained_dict = {}
@@ -466,7 +463,8 @@ def get_regressor_output(features):
     pose = theta[:, 3:75].contiguous()
     shape = theta[:, 75:].contiguous()
 
-    verts, _, _ = smpl(pose, shape)
+    pred_output = smpl(betas=shape, body_pose=pose[:, 3:], global_orient=pose[:, :3], pose2rot=True)
+    verts = pred_output.vertices # , _, _ = smpl(pose, shape)
 
     verts = verts.reshape(batch_size, seqlen, -1, 3)
     cam = cam.reshape(batch_size, seqlen, -1)

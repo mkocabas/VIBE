@@ -42,17 +42,10 @@ class MotionDiscriminator(nn.Module):
         self.attention_layers = attention_layers
         self.attention_dropout = attention_dropout
 
-        if use_spectral_norm:
-            self.gru = nn.GRU(self.input_size, self.rnn_size, num_layers=num_layers)
-            self.gru = spectral_norm(self.gru, name='weight_ih_l0')
-            self.gru = spectral_norm(self.gru, name='weight_hh_l0')
-        else:
-            self.gru = nn.GRU(self.input_size, self.rnn_size, num_layers=num_layers)
-        if feature_pool == "concat":
-            linear_size = self.rnn_size * 2
-        else:
-            linear_size = self.rnn_size * 2
+        self.gru = nn.GRU(self.input_size, self.rnn_size, num_layers=num_layers)
+
         linear_size = self.rnn_size if not feature_pool == "concat" else self.rnn_size * 2
+
         if feature_pool == "attention" :
             self.attention = SelfAttention(attention_size=self.attention_size,
                                        layers=self.attention_layers,
@@ -79,7 +72,7 @@ class MotionDiscriminator(nn.Module):
         elif self.feature_pool == "attention":
             outputs = outputs.permute(1, 0, 2)
             y, attentions = self.attention(outputs)
-            output=y
+            output = self.fc(y)
         else:
             output = self.fc(outputs[-1])
 

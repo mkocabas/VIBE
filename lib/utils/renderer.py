@@ -19,7 +19,7 @@ import trimesh
 import pyrender
 import numpy as np
 from pyrender.constants import RenderFlags
-from lib.models.spin import get_smpl_faces
+from lib.models.smpl import get_smpl_faces
 
 
 class WeakPerspectiveCamera(pyrender.Camera):
@@ -47,7 +47,7 @@ class WeakPerspectiveCamera(pyrender.Camera):
         return P
 
 
-class Renderer():
+class Renderer:
     def __init__(self, resolution=(224,224), orig_img=False, wireframe=False):
         self.resolution = resolution
 

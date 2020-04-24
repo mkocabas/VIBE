@@ -4,106 +4,13 @@
 import math
 import torch
 import numpy as np
+import os.path as osp
 import torch.nn as nn
-from smplx import SMPL as _SMPL
-from torch.nn import functional as F
-from smplx.lbs import vertices2joints
-from smplx.body_models import ModelOutput
 import torchvision.models.resnet as resnet
 
-from lib.utils.geometry import rotation_matrix_to_angle_axis
-
-# Map joints to SMPL joints
-JOINT_MAP = {
-'OP Nose': 24, 'OP Neck': 12, 'OP RShoulder': 17,
-'OP RElbow': 19, 'OP RWrist': 21, 'OP LShoulder': 16,
-'OP LElbow': 18, 'OP LWrist': 20, 'OP MidHip': 0,
-'OP RHip': 2, 'OP RKnee': 5, 'OP RAnkle': 8,
-'OP LHip': 1, 'OP LKnee': 4, 'OP LAnkle': 7,
-'OP REye': 25, 'OP LEye': 26, 'OP REar': 27,
-'OP LEar': 28, 'OP LBigToe': 29, 'OP LSmallToe': 30,
-'OP LHeel': 31, 'OP RBigToe': 32, 'OP RSmallToe': 33, 'OP RHeel': 34,
-'Right Ankle': 8, 'Right Knee': 5, 'Right Hip': 45,
-'Left Hip': 46, 'Left Knee': 4, 'Left Ankle': 7,
-'Right Wrist': 21, 'Right Elbow': 19, 'Right Shoulder': 17,
-'Left Shoulder': 16, 'Left Elbow': 18, 'Left Wrist': 20,
-'Neck (LSP)': 47, 'Top of Head (LSP)': 48,
-'Pelvis (MPII)': 49, 'Thorax (MPII)': 50,
-'Spine (H36M)': 51, 'Jaw (H36M)': 52,
-'Head (H36M)': 53, 'Nose': 24, 'Left Eye': 26,
-'Right Eye': 25, 'Left Ear': 28, 'Right Ear': 27
-}
-
-JOINT_NAMES = [
-'OP Nose', 'OP Neck', 'OP RShoulder',
-'OP RElbow', 'OP RWrist', 'OP LShoulder',
-'OP LElbow', 'OP LWrist', 'OP MidHip',
-'OP RHip', 'OP RKnee', 'OP RAnkle',
-'OP LHip', 'OP LKnee', 'OP LAnkle',
-'OP REye', 'OP LEye', 'OP REar',
-'OP LEar', 'OP LBigToe', 'OP LSmallToe',
-'OP LHeel', 'OP RBigToe', 'OP RSmallToe', 'OP RHeel',
-'Right Ankle', 'Right Knee', 'Right Hip',
-'Left Hip', 'Left Knee', 'Left Ankle',
-'Right Wrist', 'Right Elbow', 'Right Shoulder',
-'Left Shoulder', 'Left Elbow', 'Left Wrist',
-'Neck (LSP)', 'Top of Head (LSP)',
-'Pelvis (MPII)', 'Thorax (MPII)',
-'Spine (H36M)', 'Jaw (H36M)',
-'Head (H36M)', 'Nose', 'Left Eye',
-'Right Eye', 'Left Ear', 'Right Ear'
-]
-
-# Dict containing the joints in numerical order
-JOINT_IDS = {JOINT_NAMES[i]: i for i in range(len(JOINT_NAMES))}
-
-JOINT_REGRESSOR_TRAIN_EXTRA = 'data/vibe_data/J_regressor_extra.npy'
-SMPL_MEAN_PARAMS = 'data/vibe_data/smpl_mean_params.npz'
-SMPL_MODEL_DIR = 'data/vibe_data'
-H36M_TO_J17 = [6, 5, 4, 1, 2, 3, 16, 15, 14, 11, 12, 13, 8, 10, 0, 7, 9]
-H36M_TO_J14 = H36M_TO_J17[:14]
-
-
-def get_smpl_faces():
-    smpl = SMPL(SMPL_MODEL_DIR, batch_size=1, create_transl=False)
-    return smpl.faces
-
-def rot6d_to_rotmat_spin(x):
-    """Convert 6D rotation representation to 3x3 rotation matrix.
-    Based on Zhou et al., "On the Continuity of Rotation Representations in Neural Networks", CVPR 2019
-    Input:
-        (B,6) Batch of 6-D rotation representations
-    Output:
-        (B,3,3) Batch of corresponding rotation matrices
-    """
-    x = x.view(-1,3,2)
-    a1 = x[:, :, 0]
-    a2 = x[:, :, 1]
-    b1 = F.normalize(a1)
-    b2 = F.normalize(a2 - torch.einsum('bi,bi->b', b1, a2).unsqueeze(-1) * b1)
-
-    # inp = a2 - torch.einsum('bi,bi->b', b1, a2).unsqueeze(-1) * b1
-    # denom = inp.pow(2).sum(dim=1).sqrt().unsqueeze(-1) + 1e-8
-    # b2 = inp / denom
-
-    b3 = torch.cross(b1, b2)
-    return torch.stack((b1, b2, b3), dim=-1)
-
-def rot6d_to_rotmat(x):
-    x = x.view(-1,3,2)
-
-    # Normalize the first vector
-    b1 = F.normalize(x[:, :, 0], dim=1, eps=1e-6)
-
-    dot_prod = torch.sum(b1 * x[:, :, 1], dim=1, keepdim=True)
-    # Compute the second vector by finding the orthogonal complement to it
-    b2 = F.normalize(x[:, :, 1] - dot_prod * b1, dim=-1, eps=1e-6)
-
-    # Finish building the basis by taking the cross product
-    b3 = torch.cross(b1, b2, dim=1)
-    rot_mats = torch.stack([b1, b2, b3], dim=-1)
-
-    return rot_mats
+from lib.core.config import VIBE_DATA_DIR
+from lib.utils.geometry import rotation_matrix_to_angle_axis, rot6d_to_rotmat
+from lib.models.smpl import SMPL, SMPL_MODEL_DIR, H36M_TO_J14, SMPL_MEAN_PARAMS
 
 
 class Bottleneck(nn.Module):
@@ -300,7 +207,7 @@ class HMR(nn.Module):
 
 
 class Regressor(nn.Module):
-    def __init__(self, smpl_mean_params='data/vibe_data/smpl_mean_params.npz'):
+    def __init__(self, smpl_mean_params=SMPL_MEAN_PARAMS):
         super(Regressor, self).__init__()
 
         npose = 24 * 6
@@ -386,7 +293,7 @@ class Regressor(nn.Module):
         return output
 
 
-def hmr(smpl_mean_params='data/vibe_data/smpl_mean_params.npz', pretrained=True, **kwargs):
+def hmr(smpl_mean_params=SMPL_MEAN_PARAMS, pretrained=True, **kwargs):
     """
     Constructs an HMR model with ResNet50 backbone.
     Args:
@@ -446,35 +353,10 @@ def perspective_projection(points, rotation, translation,
     return projected_points[:, :, :-1]
 
 
-class SMPL(_SMPL):
-    """ Extension of the official SMPL implementation to support more joints """
-
-    def __init__(self, *args, **kwargs):
-        super(SMPL, self).__init__(*args, **kwargs)
-        joints = [JOINT_MAP[i] for i in JOINT_NAMES]
-        J_regressor_extra = np.load(JOINT_REGRESSOR_TRAIN_EXTRA)
-        self.register_buffer('J_regressor_extra', torch.tensor(J_regressor_extra, dtype=torch.float32))
-        self.joint_map = torch.tensor(joints, dtype=torch.long)
-
-    def forward(self, *args, **kwargs):
-        kwargs['get_skin'] = True
-        smpl_output = super(SMPL, self).forward(*args, **kwargs)
-        extra_joints = vertices2joints(self.J_regressor_extra, smpl_output.vertices)
-        joints = torch.cat([smpl_output.joints, extra_joints], dim=1)
-        joints = joints[:, self.joint_map, :]
-        output = ModelOutput(vertices=smpl_output.vertices,
-                             global_orient=smpl_output.global_orient,
-                             body_pose=smpl_output.body_pose,
-                             joints=joints,
-                             betas=smpl_output.betas,
-                             full_pose=smpl_output.full_pose)
-        return output
-
-
 def get_pretrained_hmr():
     device = 'cuda'
     model = hmr().to(device)
-    checkpoint = torch.load('data/vibe_data/spin_model_checkpoint.pth.tar')
+    checkpoint = torch.load(osp.join(VIBE_DATA_DIR, 'spin_model_checkpoint.pth.tar'))
     model.load_state_dict(checkpoint['model'], strict=False)
     model.eval()
     return model

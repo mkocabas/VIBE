@@ -16,6 +16,8 @@
 
 import torch
 import numpy as np
+from torch.nn import functional as F
+
 
 def batch_rodrigues(axisang):
     # This function is borrowed from https://github.com/MandyMo/pytorch_HMR/blob/master/src/util.py#L37
@@ -62,6 +64,7 @@ def quat2mat(quat):
                          dim=1).view(batch_size, 3, 3)
     return rotMat
 
+
 def rotation_matrix_to_angle_axis(rotation_matrix):
     """
     This function is borrowed from https://github.com/kornia/kornia
@@ -92,6 +95,7 @@ def rotation_matrix_to_angle_axis(rotation_matrix):
     aa = quaternion_to_angle_axis(quaternion)
     aa[torch.isnan(aa)] = 0.0
     return aa
+
 
 def quaternion_to_angle_axis(quaternion: torch.Tensor) -> torch.Tensor:
     """
@@ -144,6 +148,7 @@ def quaternion_to_angle_axis(quaternion: torch.Tensor) -> torch.Tensor:
     angle_axis[..., 1] += q2 * k
     angle_axis[..., 2] += q3 * k
     return angle_axis
+
 
 def rotation_matrix_to_quaternion(rotation_matrix, eps=1e-6):
     """
@@ -298,3 +303,42 @@ def estimate_translation(S, joints_2d, focal_length=5000., img_size=224.):
         conf_i = joints_conf[i]
         trans[i] = estimate_translation_np(S_i, joints_i, conf_i, focal_length=focal_length, img_size=img_size)
     return torch.from_numpy(trans).to(device)
+
+
+def rot6d_to_rotmat_spin(x):
+    """Convert 6D rotation representation to 3x3 rotation matrix.
+    Based on Zhou et al., "On the Continuity of Rotation Representations in Neural Networks", CVPR 2019
+    Input:
+        (B,6) Batch of 6-D rotation representations
+    Output:
+        (B,3,3) Batch of corresponding rotation matrices
+    """
+    x = x.view(-1,3,2)
+    a1 = x[:, :, 0]
+    a2 = x[:, :, 1]
+    b1 = F.normalize(a1)
+    b2 = F.normalize(a2 - torch.einsum('bi,bi->b', b1, a2).unsqueeze(-1) * b1)
+
+    # inp = a2 - torch.einsum('bi,bi->b', b1, a2).unsqueeze(-1) * b1
+    # denom = inp.pow(2).sum(dim=1).sqrt().unsqueeze(-1) + 1e-8
+    # b2 = inp / denom
+
+    b3 = torch.cross(b1, b2)
+    return torch.stack((b1, b2, b3), dim=-1)
+
+
+def rot6d_to_rotmat(x):
+    x = x.view(-1,3,2)
+
+    # Normalize the first vector
+    b1 = F.normalize(x[:, :, 0], dim=1, eps=1e-6)
+
+    dot_prod = torch.sum(b1 * x[:, :, 1], dim=1, keepdim=True)
+    # Compute the second vector by finding the orthogonal complement to it
+    b2 = F.normalize(x[:, :, 1] - dot_prod * b1, dim=-1, eps=1e-6)
+
+    # Finish building the basis by taking the cross product
+    b3 = torch.cross(b1, b2, dim=1)
+    rot_mats = torch.stack([b1, b2, b3], dim=-1)
+
+    return rot_mats

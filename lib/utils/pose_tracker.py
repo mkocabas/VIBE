@@ -21,6 +21,7 @@ import subprocess
 import numpy as np
 import os.path as osp
 
+
 def run_openpose(
         video_file,
         output_folder,

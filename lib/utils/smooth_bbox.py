@@ -5,6 +5,7 @@ import numpy as np
 import scipy.signal as signal
 from scipy.ndimage.filters import gaussian_filter1d
 
+
 def get_smooth_bbox_params(kps, vis_thresh=2, kernel_size=11, sigma=3):
     """
     Computes smooth bounding box parameters from keypoints:
@@ -31,6 +32,7 @@ def get_smooth_bbox_params(kps, vis_thresh=2, kernel_size=11, sigma=3):
     smoothed = np.vstack((np.zeros((start, 3)), smoothed))
     return smoothed, start, end
 
+
 def kp_to_bbox_param(kp, vis_thresh):
     """
     Finds the bounding box parameters from the 2D keypoints.
@@ -55,6 +57,7 @@ def kp_to_bbox_param(kp, vis_thresh):
     center = (min_pt + max_pt) / 2.
     scale = 150. / person_height
     return np.append(center, scale)
+
 
 def get_all_bbox_params(kps, vis_thresh=2):
     """
@@ -98,6 +101,7 @@ def get_all_bbox_params(kps, vis_thresh=2):
         bbox_params = np.vstack((bbox_params, bbox_param))
 
     return bbox_params, start_index, i - num_to_interpolate + 1
+
 
 def smooth_bbox_params(bbox_params, kernel_size=11, sigma=8):
     """

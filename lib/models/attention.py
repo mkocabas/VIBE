@@ -17,6 +17,11 @@
 import torch
 from torch import nn
 
+def init_weights(m):
+    if type(m) == nn.Linear:
+        torch.nn.init.uniform_(m.weight, -0.1, 0.1)
+        m.bias.data.fill_(0.01)
+
 class SelfAttention(nn.Module):
     def __init__(self, attention_size,
                  batch_first=False,
@@ -44,7 +49,7 @@ class SelfAttention(nn.Module):
         modules.append(nn.Dropout(dropout))
 
         self.attention = nn.Sequential(*modules)
-
+        self.attention.apply(init_weights) 
         self.softmax = nn.Softmax(dim=-1)
 
 
@@ -60,22 +65,8 @@ class SelfAttention(nn.Module):
         scores = self.attention(inputs).squeeze()
         scores = self.softmax(scores)
 
-        # ##################################################################
-        # # Step 2 - Masking
-        # ##################################################################
-        #
-        # # construct a mask, based on sentence lengths
-        # mask = self.get_mask(scores, lengths)
-        #
-        # # apply the mask - zero out masked timesteps
-        # masked_scores = scores * mask
-        #
-        # # re-normalize the masked scores
-        # _sums = masked_scores.sum(-1, keepdim=True)  # sums per row
-        # scores = masked_scores.div(_sums)  # divide by row sum
-
         ##################################################################
-        # Step 3 - Weighted sum of hidden states, by the attention scores
+        # Step 2 - Weighted sum of hidden states, by the attention scores
         ##################################################################
 
         # multiply each hidden state with the attention weights
@@ -83,6 +74,6 @@ class SelfAttention(nn.Module):
 
         # sum the hidden states
         # representations = weighted.sum(1).squeeze()
-
-        return weighted, scores
+        representations = weighted.sum(1).squeeze()
+        return representations, scores
 
