@@ -55,9 +55,9 @@ class VIBELoss(nn.Module):
             motion_discriminator=None,
     ):
         # to reduce time dimension
-        reduce = lambda x: x.contiguous().view((x.shape[0] * x.shape[1],) + x.shape[2:])
+        reduce = lambda x: x.reshape((x.shape[0] * x.shape[1],) + x.shape[2:])
         # flatten for weight vectors
-        flatten = lambda x: x.contiguous().view(-1)
+        flatten = lambda x: x.reshape(-1)
         # accumulate all predicted thetas from IEF
         accumulate_thetas = lambda x: torch.cat([output['theta'] for output in x],0)
 

@@ -20,8 +20,8 @@ import torchvision
 import numpy as np
 import matplotlib.pyplot as plt
 
-from lib.data_utils.img_utils import get_single_image_crop, convert_cvimg_to_tensor
 from lib.utils.vis import batch_visualize_preds
+from lib.data_utils.img_utils import get_single_image_crop, convert_cvimg_to_tensor
 
 
 def extract_features(model, video, bbox, debug=False, batch_size=200, kp_2d=None, dataset=None, scale=1.3):
