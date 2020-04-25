@@ -11,11 +11,11 @@ source scripts/prepare_training_data.sh
 ```
 
 This script will first create a folder for the dataset files `$ROOT/data/vibe_db`, then process each dataset and save
-output files to this directory. Before running the script, modify the `--folder` argument in each line to point the
+output files to this directory. Before proceeding, you need to download each of the datasets listed
+below, then modify the `--dir` argument in the script to point the
 directory of each dataset.
 
-Before proceeding, you need to download each of the datasets indicated
-below and put them into a specific folder structure.
+
 
 ## Datasets
 
