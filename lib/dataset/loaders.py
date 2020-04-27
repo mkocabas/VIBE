@@ -16,7 +16,7 @@
 
 from torch.utils.data import ConcatDataset, DataLoader
 
-from lib.dataset import AMASS
+from lib.dataset import *
 
 
 def get_data_loaders(cfg):

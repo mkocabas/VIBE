@@ -23,6 +23,7 @@ import pyrender
 import numpy as np
 from matplotlib import pyplot as plt
 
+from lib.data_utils import kp_utils
 from lib.models.smpl import SMPL, SMPL_MODEL_DIR, get_smpl_faces
 from lib.data_utils.img_utils import torch2numpy, torch_vid2numpy, normalize_2d_kp
 
