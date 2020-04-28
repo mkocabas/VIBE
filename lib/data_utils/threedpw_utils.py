@@ -56,7 +56,6 @@ def read_data(folder, set, debug=False):
 
     model = spin.get_pretrained_hmr()
 
-    if set == 'val': set = 'test'
     sequences = [x.split('.')[0] for x in os.listdir(osp.join(folder, 'sequenceFiles', set))]
 
     J_regressor = None
