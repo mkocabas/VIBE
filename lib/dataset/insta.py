@@ -22,12 +22,10 @@ import os.path as osp
 
 from torch.utils.data import Dataset
 from lib.core.config import VIBE_DB_DIR
+from lib.data_utils.kp_utils import convert_kps
 from lib.data_utils.img_utils import normalize_2d_kp, split_into_chunks
-from lib.data_utils.kp_utils import get_perm_idxs, convert_kps
 
 logger = logging.getLogger(__name__)
-
-perm = get_perm_idxs('insta', 'common')
 
 class Insta(Dataset):
     def __init__(self, seqlen, overlap=0., debug=False):

@@ -77,7 +77,7 @@ class Renderer:
 
     def render(self, img, verts, cam, angle=None, axis=None, mesh_filename=None, color=[1.0, 1.0, 0.9]):
 
-        mesh = trimesh.Trimesh(vertices=verts, faces=self.faces)
+        mesh = trimesh.Trimesh(vertices=verts, faces=self.faces, process=False)
 
         Rx = trimesh.transformations.rotation_matrix(math.radians(180), [1, 0, 0])
         mesh.apply_transform(Rx)
