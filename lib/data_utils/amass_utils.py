@@ -89,10 +89,12 @@ def read_single_sequence(folder, seq_name):
         actions = [x for x in os.listdir(osp.join(folder, subject)) if x.endswith('.npz')]
 
         for action in actions:
-            data = np.load(osp.join(folder, subject, action))
+            fname = osp.join(folder, subject, action)
             
-            if not ('poses' in data.keys()):
+            if fname.endswith('shape.npz'):
                 continue
+                
+            data = np.load(fname)
                 
             pose = data['poses'][:, joints_to_use]
 
