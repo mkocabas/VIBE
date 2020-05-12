@@ -90,6 +90,10 @@ def read_single_sequence(folder, seq_name):
 
         for action in actions:
             data = np.load(osp.join(folder, subject, action))
+            
+            if not ('poses' in data.keys()):
+                continue
+                
             pose = data['poses'][:, joints_to_use]
 
             if pose.shape[0] < 60:
