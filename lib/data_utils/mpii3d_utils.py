@@ -332,7 +332,7 @@ if __name__ == '__main__':
     joblib.dump(dataset, osp.join(VIBE_DB_DIR, 'mpii3d_val_db.pt'))
 
     dataset = read_data_train(args.dir)
-    joblib.dump(dataset, osp.join(VIBE_DB_DIR, 'mpii3d_spin_db.pt'))
+    joblib.dump(dataset, osp.join(VIBE_DB_DIR, 'mpii3d_train_db.pt'))
 
 
 
