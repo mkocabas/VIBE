@@ -41,12 +41,12 @@ Note that this option doubles the rendering time.
 ## Examples
 - Run VIBE on a video file using bbox tracker and visualize the results with wireframe meshes:
 ```bash
-python demo_video.py --vid_file sample_video.mp4 --output_folder output/ --tracking method bbox --detector maskrcnn --display --wireframe
+python demo_video.py --vid_file sample_video.mp4 --output_folder output/ --tracking_method bbox --detector maskrcnn --display --wireframe
 ```
 
 - Run VIBE on a YouTube video using pose tracker and run Temporal SMPLify to further refine the predictions:
 ```bash
-python demo_video.py --vid_file sample_video.mp4 --output_folder output/ --tracking method pose --display --run_smplify
+python demo_video.py --vid_file sample_video.mp4 --output_folder output/ --tracking_method pose --display --run_smplify
 ```
 
 - Change the default batch sizes to avoid possible memory errors:
