@@ -185,7 +185,7 @@ class TemporalSMPLify():
             betas_ext = arrange_betas(body_pose, betas)
             smpl_output = self.smpl(global_orient=global_orient,
                                     body_pose=body_pose,
-                                    betas=betas_ext, return_full_pose=True)
+                                    betas=betas_ext)
             model_joints = smpl_output.joints
             reprojection_loss = temporal_body_fitting_loss(body_pose, betas, model_joints, camera_translation,
                                                            camera_center,
