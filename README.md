@@ -34,6 +34,7 @@ This implementation:
 - achieves SOTA results on 3DPW and MPI-INF-3DHP datasets,
 - includes Temporal SMPLify implementation.
 - includes the training code and detailed instruction on how to train it from scratch.
+- can create an FBX/glTF output to be used with major graphics softwares.
 
 <p float="center">
   <img src="https://s5.gifyu.com/images/method_v2.gif" width="49%" />
@@ -86,6 +87,27 @@ Sample demo output with the `--sideview` flag:
   <img src="https://s5.gifyu.com/images/sample_video.gif" width="30%" />
 </p>
 
+### FBX and glTF output (New Feature!)
+We provide a script to convert VIBE output to standalone FBX/glTF files to be used in 3D graphics tools like
+Blender, Unity etc. You need to follow steps below to be able to run the conversion script.
+
+- You need to download FBX files for SMPL body model
+    - Go to [SMPL website](https://smpl.is.tue.mpg.de/) and create an account.
+    - Download the Unity-compatible FBX file through the [link](https://psfiles.is.tuebingen.mpg.de/downloads/smpl/SMPL_unity_v-1-0-0-zip)
+    - Unzip the contents and locate them `data/SMPL_unity_v.1.0.0`.
+- Install Blender python API
+    - Note that we tested our script with Blender v2.8.0 and v2.8.3.
+- Run the command below to convert VIBE output to FBX:
+```
+python lib/utils/fbx_output.py \
+    --input output/sample_video/vibe_output.pkl \
+    --output output/sample_video/fbx_output.fbx \ # specify the file extension as *.glb for glTF
+    --fps_source 30 \
+    --fps_target 30 \
+    --gender <male or female> \
+    --person_id <tracklet id from VIBE output>
+
+``` 
 
 ## Google Colab
 If you do not have a suitable environment to run this project then you could give Google Colab a try. 
