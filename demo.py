@@ -32,6 +32,7 @@ from torch.utils.data import DataLoader
 from lib.models.vibe import VIBE_Demo
 from lib.utils.renderer import Renderer
 from lib.dataset.inference import Inference
+from lib.utils.smooth_pose import smooth_pose
 from lib.data_utils.kp_utils import convert_kps
 from lib.utils.pose_tracker import run_posetracker
 
@@ -216,6 +217,14 @@ def main(args):
         pred_betas = pred_betas.cpu().numpy()
         pred_joints3d = pred_joints3d.cpu().numpy()
 
+        # Runs 1 Euro Filter to smooth out the results
+        if args.smooth:
+            min_cutoff = args.smooth_min_cutoff # 0.004
+            beta = args.smooth_beta # 1.5
+            print(f'Running smoothing on person {person_id}, min_cutoff: {min_cutoff}, beta: {beta}')
+            pred_verts, pred_pose, pred_joints3d = smooth_pose(pred_pose, pred_betas,
+                                                               min_cutoff=min_cutoff, beta=beta)
+
         orig_cam = convert_crop_cam_to_orig_img(
             cam=pred_cam,
             bbox=bboxes,
@@ -377,6 +386,17 @@ if __name__ == '__main__':
 
     parser.add_argument('--save_obj', action='store_true',
                         help='save results as .obj files.')
+
+    parser.add_argument('--smooth', action='store_true',
+                        help='smooth the results to prevent jitter')
+
+    parser.add_argument('--smooth_min_cutoff', type=float, default=0.004,
+                        help='one euro filter min cutoff. '
+                             'Decreasing the minimum cutoff frequency decreases slow speed jitter')
+
+    parser.add_argument('--smooth_beta', type=float, default=0.7,
+                        help='one euro filter beta. '
+                             'Increasing the speed coefficient(beta) decreases speed lag.')
 
     args = parser.parse_args()
 

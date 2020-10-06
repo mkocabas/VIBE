@@ -41,6 +41,11 @@ This implementation:
   <img src="https://s5.gifyu.com/images/parkour.gif" width="49%" />
 </p>
 
+## Updates
+
+- 06/10/2020: Support OneEuroFilter smoothing.
+- 14/09/2020: FBX/glTF conversion script is released.
+
 ## Getting Started
 VIBE has been implemented and tested on Ubuntu 18.04 with python >= 3.7. It supports both GPU and CPU inference.
 If you don't have a suitable device, try running our Colab demo. 
