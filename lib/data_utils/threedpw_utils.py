@@ -167,8 +167,5 @@ if __name__ == '__main__':
     dataset = read_data(args.dir, 'validation', debug=debug)
     joblib.dump(dataset, osp.join(VIBE_DB_DIR, '3dpw_val_db.pt'))
 
-    dataset = read_data(args.dir, 'train', debug=debug)
-    joblib.dump(dataset, osp.join(VIBE_DB_DIR, '3dpw_train_db.pt'))
-
     dataset = read_data(args.dir, 'test', debug=debug)
     joblib.dump(dataset, osp.join(VIBE_DB_DIR, '3dpw_test_db.pt'))

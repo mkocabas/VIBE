@@ -41,7 +41,6 @@ This implementation:
   <img src="https://s5.gifyu.com/images/parkour.gif" width="49%" />
 </p>
 
-
 ## Getting Started
 VIBE has been implemented and tested on Ubuntu 18.04 with python >= 3.7. It supports both GPU and CPU inference.
 If you don't have a suitable device, try running our Colab demo. 
@@ -136,10 +135,13 @@ Procrustes Aligned Mean Per Joint Position Error (PA-MPJPE) in mm.
 | SPIN           | 59.2 |     67.5     | **41.1** |
 | Temporal HMR   | 76.7 |     89.8     | 56.8 |
 | VIBE           | 56.5 |     **63.4**     | 41.5 |
-| VIBE + 3DPW    | **51.9** |     64.6     | 41.4 |
 
 See [`doc/eval.md`](doc/eval.md) to reproduce the results in this table or 
 evaluate a pretrained model.
+
+**Correction**: Due to a mistake in dataset preprocessing, VIBE trained with 3DPW results in Table 1 of the original paper are not correct.
+Besides, even though training with 3DPW guarantees better quantitative performance, it does not give good 
+qualitative results. ArXiv version will be updated with the corrected results. 
 
 ## Citation
 

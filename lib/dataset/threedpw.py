@@ -23,7 +23,7 @@ class ThreeDPW(Dataset3D):
 
         # during testing we don't need data augmentation
         # but we can use it as an ensemble
-        is_train = set == 'train'
+        is_train = False
         overlap = overlap if is_train else 0.
         print('3DPW Dataset overlap ratio: ', overlap)
         super(ThreeDPW, self).__init__(
