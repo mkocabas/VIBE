@@ -2,8 +2,8 @@
 [![report](https://img.shields.io/badge/arxiv-report-red)](https://arxiv.org/abs/1912.05656) [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1dFfwxZ52MN86FA6uFNypMEdFShd2euQA) [![PWC](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/vibe-video-inference-for-human-body-pose-and/3d-human-pose-estimation-on-3dpw)](https://paperswithcode.com/sota/3d-human-pose-estimation-on-3dpw?p=vibe-video-inference-for-human-body-pose-and)
 
 <p float="center">
-  <img src="https://s5.gifyu.com/images/ezgif-6-fb456de304c9.gif" width="49%" />
-  <img src="https://s5.gifyu.com/images/ezgif.com-optimize6d7c4d9d7251b20a.gif" width="49%" />
+  <img src="doc/assets/header_1.gif" width="49%" />
+  <img src="doc/assets/header_2.gif" width="49%" />
 </p>
 
 Check our YouTube videos below for more details.
@@ -37,8 +37,8 @@ This implementation:
 - can create an FBX/glTF output to be used with major graphics softwares.
 
 <p float="center">
-  <img src="https://s5.gifyu.com/images/method_v2.gif" width="49%" />
-  <img src="https://s5.gifyu.com/images/parkour.gif" width="49%" />
+  <img src="doc/assets/method_1.gif" width="49%" />
+  <img src="doc/assets/parkour.gif" width="49%" />
 </p>
 
 ## Updates
@@ -88,7 +88,7 @@ Refer to [`doc/demo.md`](doc/demo.md) for more details about the demo code.
 Sample demo output with the `--sideview` flag:
 
 <p float="left">
-  <img src="https://s5.gifyu.com/images/sample_video.gif" width="30%" />
+  <img src="doc/assets/sample_video.gif" width="30%" />
 </p>
 
 ### FBX and glTF output (New Feature!)
