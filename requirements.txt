@@ -4,7 +4,7 @@ h5py==2.10.0
 numpy==1.17.5
 scipy==1.4.1
 numba==0.47.0
-smplx==0.1.13
+smplx==0.1.26
 gdown==3.6.4
 PyYAML==5.3.1
 joblib==0.14.1
