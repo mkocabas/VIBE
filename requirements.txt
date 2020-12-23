@@ -8,7 +8,7 @@ smplx==0.1.26
 gdown==3.6.4
 PyYAML==5.3.1
 joblib==0.14.1
-pillow==6.2.1
+pillow==7.1.0
 trimesh==3.5.25
 pyrender==0.1.36
 progress==1.5
