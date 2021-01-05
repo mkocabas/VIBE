@@ -43,6 +43,7 @@ This implementation:
 
 ## Updates
 
+- 05/01/2021: Windows installation tutorial is added thanks to amazing [@carlosedubarreto](https://github.com/carlosedubarreto)
 - 06/10/2020: Support OneEuroFilter smoothing.
 - 14/09/2020: FBX/glTF conversion script is released.
 
@@ -112,6 +113,13 @@ python lib/utils/fbx_output.py \
     --person_id <tracklet id from VIBE output>
 
 ``` 
+### Windows Installation Tutorial
+
+You can follow the instructions provided by [@carlosedubarreto](https://github.com/carlosedubarreto) to install and run VIBE on a Windows machine:
+
+- VIBE windows installation tutorial: https://youtu.be/3qhs5IRJ1LI
+- FBX conversion: https://youtu.be/w1biKeiQThY
+- Helper github repo: https://github.com/carlosedubarreto/vibe_win_install
 
 ## Google Colab
 If you do not have a suitable environment to run this project then you could give Google Colab a try. 
