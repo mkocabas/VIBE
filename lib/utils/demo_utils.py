@@ -258,7 +258,23 @@ def convert_crop_cam_to_orig_img(cam, bbox, img_width, img_height):
     orig_cam = np.stack([sx, sy, tx, ty]).T
     return orig_cam
 
+          
+def convert_crop_coords_to_orig_img(bbox, keypoints, crop_size):
+    # import IPython; IPython.embed(); exit()
+    cx, cy, h = bbox[:, 0], bbox[:, 1], bbox[:, 2]
 
+    # unnormalize to crop coords
+    keypoints = 0.5 * crop_size * (keypoints + 1.0)
+
+    # rescale to orig img crop
+    keypoints *= h[..., None, None] / crop_size
+
+    # transform into original image coords
+    keypoints[:,:,0] = (cx - h/2)[..., None] + keypoints[:,:,0]
+    keypoints[:,:,1] = (cy - h/2)[..., None] + keypoints[:,:,1]
+    return keypoints
+
+          
 def prepare_rendering_results(vibe_results, nframes):
     frame_results = [{} for _ in range(nframes)]
     for person_id, person_data in vibe_results.items():
