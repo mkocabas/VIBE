@@ -39,6 +39,7 @@ from lib.utils.pose_tracker import run_posetracker
 from lib.utils.demo_utils import (
     download_youtube_clip,
     smplify_runner,
+    convert_crop_coords_to_orig_img,
     convert_crop_cam_to_orig_img,
     prepare_rendering_results,
     video_to_images,
@@ -47,6 +48,7 @@ from lib.utils.demo_utils import (
 )
 
 MIN_NUM_FRAMES = 25
+
 
 def main(args):
     device = torch.device('cuda') if torch.cuda.is_available() else torch.device('cpu')
@@ -147,7 +149,7 @@ def main(args):
 
         with torch.no_grad():
 
-            pred_cam, pred_verts, pred_pose, pred_betas, pred_joints3d, norm_joints2d = [], [], [], [], [], []
+            pred_cam, pred_verts, pred_pose, pred_betas, pred_joints3d, smpl_joints2d, norm_joints2d = [], [], [], [], [], [], []
 
             for batch in dataloader:
                 if has_keypoints:
@@ -165,6 +167,7 @@ def main(args):
                 pred_pose.append(output['theta'][:,:,3:75].reshape(batch_size * seqlen, -1))
                 pred_betas.append(output['theta'][:, :,75:].reshape(batch_size * seqlen, -1))
                 pred_joints3d.append(output['kp_3d'].reshape(batch_size * seqlen, -1, 3))
+                smpl_joints2d.append(output['kp_2d']).reshape(batch_size * seqlen, -1, 2))
 
 
             pred_cam = torch.cat(pred_cam, dim=0)
@@ -172,7 +175,7 @@ def main(args):
             pred_pose = torch.cat(pred_pose, dim=0)
             pred_betas = torch.cat(pred_betas, dim=0)
             pred_joints3d = torch.cat(pred_joints3d, dim=0)
-
+            smpl_joints2d = torch.cat(smpl_joints2d, dim=0)
             del batch
 
         # ========= [Optional] run Temporal SMPLify to refine the results ========= #
@@ -216,6 +219,7 @@ def main(args):
         pred_pose = pred_pose.cpu().numpy()
         pred_betas = pred_betas.cpu().numpy()
         pred_joints3d = pred_joints3d.cpu().numpy()
+        smpl_joints2d = smpl_joints2d.cpu().numpy()
 
         # Runs 1 Euro Filter to smooth out the results
         if args.smooth:
@@ -232,6 +236,12 @@ def main(args):
             img_height=orig_height
         )
 
+        joints2d_img_coord = convert_crop_coords_to_orig_img(
+            bbox=bboxes,
+            keypoints=smpl_joints2d,
+            crop_size=224,
+        )
+
         output_dict = {
             'pred_cam': pred_cam,
             'orig_cam': orig_cam,
@@ -240,6 +250,7 @@ def main(args):
             'betas': pred_betas,
             'joints3d': pred_joints3d,
             'joints2d': joints2d,
+            'joints2d_img_coord': joints2d_img_coord,
             'bboxes': bboxes,
             'frame_ids': frames,
         }
