@@ -79,7 +79,7 @@ def read_data(folder, sequences):
 
 
 
-def read_single_sequence(folder, seq_name):
+def read_single_sequence(folder, seq_name, fps=25):
     subjects = os.listdir(folder)
 
     thetas = []
@@ -95,8 +95,10 @@ def read_single_sequence(folder, seq_name):
                 continue
                 
             data = np.load(fname)
-                
-            pose = data['poses'][:, joints_to_use]
+            
+            mocap_framerate = int(data['mocap_framerate'])
+            sampling_freq = mocap_framerate // fps
+            pose = data['poses'][0::sampling_freq, joints_to_use]
 
             if pose.shape[0] < 60:
                 continue
