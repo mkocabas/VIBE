@@ -19,7 +19,7 @@ tensorboard==1.15.0
 torchvision==0.5.0
 scikit-image==0.16.2
 scikit-video==1.1.11
-opencv-python==4.1.2.30
+opencv-python==4.2.0.32
 llvmlite==0.32.1
 git+https://github.com/mattloper/chumpy.git
 git+https://github.com/mkocabas/yolov3-pytorch.git
