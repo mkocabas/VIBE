@@ -296,6 +296,9 @@ def main(args):
 
             if args.sideview:
                 side_img = np.zeros_like(img)
+            
+            if args.topview:
+                top_img = np.zeros_like(img)
 
             for person_id, person_data in frame_results[frame_idx].items():
                 frame_verts = person_data['verts']
@@ -327,9 +330,22 @@ def main(args):
                         angle=270,
                         axis=[0,1,0],
                     )
+                    
+                if args.topview:
+                    top_img = renderer.render(
+                        top_img,
+                        frame_verts,
+                        cam=frame_cam,
+                        color=mc,
+                        angle=90,
+                        axis=[1,0,0],
+                    )
 
             if args.sideview:
                 img = np.concatenate([img, side_img], axis=1)
+            
+            if args.topview:
+                img = np.concatenate([img, top_img], axis=1)
 
             cv2.imwrite(os.path.join(output_img_folder, f'{frame_idx:06d}.png'), img)
 
@@ -394,6 +410,9 @@ if __name__ == '__main__':
 
     parser.add_argument('--sideview', action='store_true',
                         help='render meshes from alternate viewpoint.')
+    
+    parser.add_argument('--topview', action='store_true',
+                        help='render meshes from bird eye view.')
 
     parser.add_argument('--save_obj', action='store_true',
                         help='save results as .obj files.')
