@@ -5,7 +5,7 @@ numpy==1.17.5
 scipy==1.4.1
 numba==0.47.0
 smplx==0.1.26
-gdown==3.6.4
+gdown==4.5.1
 PyYAML==5.3.1
 joblib==0.14.1
 pillow==7.1.0
