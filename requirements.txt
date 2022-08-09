@@ -1,7 +1,7 @@
 tqdm==4.28.1
 yacs==0.1.6
 h5py==2.10.0
-numpy==1.17.5
+numpy==1.22.0
 scipy==1.4.1
 numba==0.47.0
 smplx==0.1.26
