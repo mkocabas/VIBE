@@ -128,12 +128,15 @@ class VIBE_Demo(nn.Module):
             bidirectional=False,
             use_residual=True,
             pretrained=osp.join(VIBE_DATA_DIR, 'spin_model_checkpoint.pth.tar'),
+            live_inference = False
     ):
 
         super(VIBE_Demo, self).__init__()
 
         self.seqlen = seqlen
         self.batch_size = batch_size
+        self.live_inference = live_inference
+        self.previous_feature = None
 
         self.encoder = TemporalEncoder(
             n_layers=n_layers,
@@ -157,11 +160,28 @@ class VIBE_Demo(nn.Module):
             print(f'=> loaded pretrained model from \'{pretrained}\'')
 
 
+    # ========= Use previously stored feature vectors if live_inferencing is turned on ========= #
+    def generate_complete_feature_vector(self,feature):
+        if self.previous_feature is not None:
+            feature = torch.cat((self.previous_feature,feature),axis = 0)
+            self.previous_feature = feature[-(self.seqlen-1):,:]
+        else:
+            self.previous_feature = feature
+        return feature
+
+
     def forward(self, input, J_regressor=None):
         # input size NTF
         batch_size, seqlen, nc, h, w = input.shape
 
         feature = self.hmr.feature_extractor(input.reshape(-1, nc, h, w))
+        
+
+
+        if(self.live_inference):
+            feature = self.generate_complete_feature_vector(feature)
+            seqlen = feature.shape[0]
+
 
         feature = feature.reshape(batch_size, seqlen, -1)
         feature = self.encoder(feature)
