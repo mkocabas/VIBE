@@ -36,6 +36,8 @@ For this option, you have to set `--tracking_method` option to `pose`.
 - `--sideview`: Render the output meshes from an alternate viewpoint. Default alternate viewpoint is -90 degrees in y axis.
 Note that this option doubles the rendering time.
 
+- `--topview`: Render the output meshes from a bird eye view. It can be used together with `--sideview` to visualize both a sideview and topview. Just like `--sideview` this option doubles the rendering time.
+
 - `--save_obj`: Save output meshes as .obj files.
 
 ## Examples
